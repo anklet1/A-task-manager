@@ -8,6 +8,21 @@ const userSchema = new mongoose.Schema({
     trim: true,
     maxlength: [50, 'Name cannot exceed 50 characters']
   },
+  username: {
+    type: String,
+    required: [true, 'Username is required'],
+    trim: true,
+    maxlength: [50, 'Username cannot exceed 50 characters'],
+    default: function() {
+      if (this.name) {
+        return this.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      }
+      if (this.email) {
+        return this.email.split('@')[0].toLowerCase();
+      }
+      return `user-${Math.random().toString(36).slice(2, 8)}`;
+    }
+  },
   email: {
     type: String,
     required: [true, 'Email is required'],

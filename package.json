@@ -14,10 +14,20 @@
     "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
     "setup": "node setup.js"
   },
-  "keywords": ["task-manager", "react", "nodejs", "mongodb", "jwt"],
+  "keywords": [
+    "task-manager",
+    "react",
+    "nodejs",
+    "mongodb",
+    "jwt"
+  ],
   "author": "Smart Task Manager Team",
   "license": "MIT",
   "devDependencies": {
     "concurrently": "^7.6.0"
+  },
+  "dependencies": {
+    "ajv-keywords": "^5.1.0",
+    "react-scripts": "^5.0.1"
   }
 }

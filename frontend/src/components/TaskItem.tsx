@@ -143,6 +143,7 @@ const TaskItem: React.FC<TaskItemProps> = ({
             onChange={(e) => handleStatusChange(e.target.value)}
             disabled={isUpdating}
             className="text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50"
+            title="Update task status"
           >
             <option value="pending">Pending</option>
             <option value="in-progress">In Progress</option>

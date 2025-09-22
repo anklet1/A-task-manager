@@ -8,16 +8,26 @@ const router = express.Router();
 
 // Generate JWT token
 const generateToken = (userId) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
+  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
 };
 
 // @route   POST /api/auth/register
 // @desc    Register a new user
 // @access  Public
 router.post('/register', [
-  body('name').trim().isLength({ min: 2, max: 50 }).withMessage('Name must be between 2 and 50 characters'),
-  body('email').isEmail().normalizeEmail().withMessage('Please enter a valid email'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
+  body('name')
+    .notEmpty().withMessage('Name is required')
+    .trim()
+    .isLength({ min: 2, max: 50 }).withMessage('Name must be between 2 and 50 characters'),
+  body('username')
+    .optional()
+    .trim()
+    .isLength({ min: 2, max: 50 }).withMessage('Username must be between 2 and 50 characters'),
+  body('email')
+    .isEmail().withMessage('Please enter a valid email')
+    .normalizeEmail(),
+  body('password')
+    .isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
 ], async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -25,7 +35,7 @@ router.post('/register', [
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, password } = req.body;
+    const { name, username, email, password } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -34,7 +44,7 @@ router.post('/register', [
     }
 
     // Create new user
-    const user = new User({ name, email, password });
+    const user = new User({ name, username, email, password });
     await user.save();
 
     // Generate token
@@ -46,7 +56,8 @@ router.post('/register', [
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        username: user.username
       }
     });
   } catch (error) {
@@ -59,7 +70,7 @@ router.post('/register', [
 // @desc    Login user
 // @access  Public
 router.post('/login', [
-  body('email').isEmail().normalizeEmail().withMessage('Please enter a valid email'),
+  body('email').isEmail().withMessage('Please enter a valid email').normalizeEmail(),
   body('password').exists().withMessage('Password is required')
 ], async (req, res) => {
   try {
@@ -91,7 +102,8 @@ router.post('/login', [
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        username: user.username
       }
     });
   } catch (error) {
@@ -109,7 +121,8 @@ router.get('/me', auth, async (req, res) => {
       user: {
         id: req.user._id,
         name: req.user.name,
-        email: req.user.email
+        email: req.user.email,
+        username: req.user.username
       }
     });
   } catch (error) {

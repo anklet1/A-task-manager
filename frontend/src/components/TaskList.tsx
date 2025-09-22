@@ -100,6 +100,7 @@ const TaskList: React.FC<TaskListProps> = ({
               value={filter}
               onChange={(e) => setFilter(e.target.value as any)}
               className="input-field"
+              title="Filter tasks by status"
             >
               <option value="all">All Tasks</option>
               <option value="pending">Pending</option>
@@ -117,6 +118,7 @@ const TaskList: React.FC<TaskListProps> = ({
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
               className="input-field"
+              title="Sort tasks by field"
             >
               <option value="createdAt">Created Date</option>
               <option value="dueDate">Due Date</option>
@@ -134,6 +136,7 @@ const TaskList: React.FC<TaskListProps> = ({
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value as any)}
               className="input-field"
+              title="Sort order"
             >
               <option value="desc">Descending</option>
               <option value="asc">Ascending</option>

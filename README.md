@@ -48,7 +48,7 @@ Smart Task Manager is a comprehensive web application that enables users to:
 - ✅ Task status management (pending, in-progress, completed)
 - ✅ Priority levels (low, medium, high)
 - ✅ Due date tracking with overdue detection
-- ✅ Task filtering and sorting
+- ✅ Task filtering and sorting (including `?status=` on list endpoint)
 - ✅ Real-time task statistics
 
 ### User Experience
@@ -79,6 +79,8 @@ smart-task-manager/
 │   ├── tests/              # Jest test files
 │   ├── server.js           # Main server file
 │   └── package.json
+├── docs/                   # Project documentation (reflection, workflows)
+│   └── reflection.md
 ├── package.json            # Root package.json
 └── README.md
 ```
@@ -161,12 +163,15 @@ The project includes comprehensive tests for:
 - `GET /api/auth/me` - Get current user (protected)
 
 ### Task Endpoints
-- `GET /api/tasks` - Get all user tasks (protected)
+- `GET /api/tasks` - Get all user tasks (protected) — supports `?status=pending|in-progress|completed`
 - `GET /api/tasks/:id` - Get single task (protected)
 - `POST /api/tasks` - Create new task (protected)
 - `PUT /api/tasks/:id` - Update task (protected)
 - `DELETE /api/tasks/:id` - Delete task (protected)
 - `PATCH /api/tasks/:id/status` - Update task status (protected)
+
+### Utility
+- `GET /api/health` - Health check endpoint
 
 ### Request/Response Examples
 
@@ -290,3 +295,36 @@ If you encounter any issues or have questions:
 ---
 
 **Built with ❤️ using modern web technologies**
+
+## 🧰 AI Usage and Workflows
+
+This project intentionally leveraged AI assistants throughout the build to accelerate delivery while maintaining code quality.
+
+- **Where AI helped**
+  - Scaffolding route logic, validation, and model constraints
+  - Proposing error-handling patterns and response shapes
+  - Writing and refining Jest + Supertest cases
+  - Drafting and iterating on documentation (this README and reflection)
+  - Suggesting small refactors (e.g., env-driven config, test-safe server bootstrap)
+
+- **AI-aware actions (evidence)**
+  - Updated `GET /api/tasks` to support query filtering (`?status=`) based on test requirements and assistant suggestions
+  - Hardened auth middleware to use a default JWT secret during tests (`process.env.JWT_SECRET || 'test-secret'`)
+  - Modified `backend/server.js` to avoid listening during tests and to use `MONGODB_URI` from `.env`
+
+- **Commit guidelines (AI-assisted)**
+  - Prefer conventional commits; examples:
+    - `feat(tasks): add status filter to list endpoint`
+    - `fix(auth): default to test jwt secret when env missing`
+    - `chore(docs): update readme with ai workflows`
+    - `test(api): cover invalid task payloads`
+  - Use your IDE assistant (e.g., CodeRabbit/Cursor) to propose concise commit messages referencing scope and intent
+
+- **Suggested workflow**
+  1. Use in-IDE AI to scaffold or refine a change
+  2. Run tests and let the assistant propose fixes for failures
+  3. Ask the assistant to generate a commit message following conventional commit format
+  4. Request a quick AI code review before pushing (spotting edge cases, naming, and validation gaps)
+  5. Iterate on README/docstrings with assistant suggestions
+
+See `docs/reflection.md` for a 500-word reflection on the AI development process.
